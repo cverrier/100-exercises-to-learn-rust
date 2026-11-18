@@ -4,8 +4,6 @@ pub struct Ticket {
     status: String,
 }
 
-// TODO: based on what you learned in this section, replace `todo!()` with
-//  the correct **stack size** for the respective type.
 #[cfg(test)]
 mod tests {
     use super::Ticket;
@@ -13,7 +11,11 @@ mod tests {
 
     #[test]
     fn string_size() {
-        assert_eq!(size_of::<String>(), todo!());
+        // Why `3 *`:
+        // - One for the pointer to the heap buffer
+        // - One for the capacity of that buffer
+        // - One for the number of initialized bytes in the `String`
+        assert_eq!(size_of::<String>(), 3 * size_of::<usize>());
     }
 
     #[test]
@@ -23,6 +25,6 @@ mod tests {
         // but, in general, the memory layout of structs is a more complex topic.
         // If you're curious, check out the "Type layout" section of The Rust Reference
         // https://doc.rust-lang.org/reference/type-layout.html for more information.
-        assert_eq!(size_of::<Ticket>(), todo!());
+        assert_eq!(size_of::<Ticket>(), 3 * size_of::<String>());
     }
 }
