@@ -1,6 +1,24 @@
-// TODO: implement a so-called "Drop bomb": a type that panics when dropped
-//  unless a certain operation has been performed on it.
-//  You can see the expected API in the tests below.
+struct DropBomb {
+    is_defused: bool,
+}
+
+impl DropBomb {
+    fn new() -> Self {
+        Self { is_defused: false }
+    }
+
+    fn defuse(mut self) {
+        self.is_defused = true;
+    }
+}
+
+impl Drop for DropBomb {
+    fn drop(&mut self) {
+        if !self.is_defused {
+            panic!("Bomb has not been defused yet!");
+        }
+    }
+}
 
 #[cfg(test)]
 mod tests {
@@ -15,7 +33,7 @@ mod tests {
 
     #[test]
     fn test_defused_drop_bomb() {
-        let mut bomb = DropBomb::new();
+        let bomb = DropBomb::new();
         bomb.defuse();
         // The bomb should not panic when dropped
         // since it has been defused
