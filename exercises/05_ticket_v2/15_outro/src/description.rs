@@ -13,26 +13,30 @@ pub enum TicketDescriptionError {
     TooLong,
 }
 
-impl TryFrom<&str> for TicketDescription {
-    type Error = TicketDescriptionError;
-
-    fn try_from(value: &str) -> Result<Self, Self::Error> {
-        if value.is_empty() {
-            return Err(Self::Error::Empty);
-        }
-        if value.len() > DESCRIPTION_MAX_BYTES {
-            return Err(Self::Error::TooLong);
-        }
-
-        Ok(Self(value.to_string()))
+fn validate(value: &str) -> Result<(), TicketDescriptionError> {
+    if value.is_empty() {
+        return Err(TicketDescriptionError::Empty);
     }
+    if value.len() > DESCRIPTION_MAX_BYTES {
+        return Err(TicketDescriptionError::TooLong);
+    }
+    Ok(())
 }
 
 impl TryFrom<String> for TicketDescription {
     type Error = TicketDescriptionError;
 
     fn try_from(value: String) -> Result<Self, Self::Error> {
-        Self::try_from(value.as_str())
+        validate(&value)?;
+        Ok(Self(value))
+    }
+}
+
+impl TryFrom<&str> for TicketDescription {
+    type Error = TicketDescriptionError;
+
+    fn try_from(value: &str) -> Result<Self, Self::Error> {
+        Self::try_from(value.to_string())
     }
 }
 

@@ -13,6 +13,10 @@ pub struct ParseStatusError {
     invalid_status: String,
 }
 
+// NOTE: unlike `TicketTitle`/`TicketDescription`, `Status` doesn't store the input
+// string, so `TryFrom<&str>` is the primary impl and `TryFrom<String>` delegates to it.
+// Don't mirror their `validate` + `TryFrom<String>`-first pattern here: it would add a
+// throwaway allocation to every `&str` parse.
 impl TryFrom<&str> for Status {
     type Error = ParseStatusError;
 
