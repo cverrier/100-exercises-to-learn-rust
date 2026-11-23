@@ -5,12 +5,12 @@ pub struct TicketTitle(String);
 
 const TITLE_MAX_BYTES: usize = 50;
 
-#[derive(Error, Debug)]
+#[derive(Debug, Error)]
 pub enum TicketTitleError {
     #[error("The title cannot be empty")]
-    TitleEmpty,
+    Empty,
     #[error("The title cannot be longer than {TITLE_MAX_BYTES} bytes")]
-    TitleTooLong,
+    TooLong,
 }
 
 impl TryFrom<&str> for TicketTitle {
@@ -18,10 +18,10 @@ impl TryFrom<&str> for TicketTitle {
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         if value.is_empty() {
-            return Err(Self::Error::TitleEmpty);
+            return Err(Self::Error::Empty);
         }
         if value.len() > TITLE_MAX_BYTES {
-            return Err(Self::Error::TitleTooLong);
+            return Err(Self::Error::TooLong);
         }
 
         Ok(Self(value.to_string()))

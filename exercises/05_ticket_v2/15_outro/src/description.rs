@@ -8,9 +8,9 @@ const DESCRIPTION_MAX_BYTES: usize = 500;
 #[derive(Debug, Error)]
 pub enum TicketDescriptionError {
     #[error("The description cannot be empty")]
-    DescriptionEmpty,
+    Empty,
     #[error("The description cannot be longer than {DESCRIPTION_MAX_BYTES} bytes")]
-    DescriptionTooLong,
+    TooLong,
 }
 
 impl TryFrom<&str> for TicketDescription {
@@ -18,13 +18,13 @@ impl TryFrom<&str> for TicketDescription {
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
         if value.is_empty() {
-            return Err(Self::Error::DescriptionEmpty);
+            return Err(Self::Error::Empty);
         }
         if value.len() > DESCRIPTION_MAX_BYTES {
-            return Err(Self::Error::DescriptionTooLong);
+            return Err(Self::Error::TooLong);
         }
 
-        Ok(TicketDescription(value.to_string()))
+        Ok(Self(value.to_string()))
     }
 }
 
