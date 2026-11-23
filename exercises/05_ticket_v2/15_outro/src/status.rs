@@ -21,13 +21,16 @@ impl TryFrom<&str> for Status {
     type Error = ParseStatusError;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
-        match value.to_lowercase().as_str() {
-            "todo" => Ok(Self::ToDo),
-            "inprogress" => Ok(Self::InProgress),
-            "done" => Ok(Self::Done),
-            _ => Err(Self::Error {
+        if value.eq_ignore_ascii_case("todo") {
+            Ok(Self::ToDo)
+        } else if value.eq_ignore_ascii_case("inprogress") {
+            Ok(Self::InProgress)
+        } else if value.eq_ignore_ascii_case("done") {
+            Ok(Self::Done)
+        } else {
+            Err(ParseStatusError {
                 invalid_status: value.to_string(),
-            }),
+            })
         }
     }
 }
