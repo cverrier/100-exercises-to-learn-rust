@@ -15,7 +15,12 @@ pub fn fibonacci(n: u32) -> u32 {
     //
     // Hint: use a `Vec` to memoize the results you have already calculated
     // so that you don't have to recalculate them several times.
-    todo!()
+    let mut accumulated_terms: Vec<u32> = vec![0, 1];
+    let n = n as usize;
+    for i in 2..=n {
+        accumulated_terms.push(accumulated_terms[i - 1] + accumulated_terms[i - 2]);
+    }
+    accumulated_terms[n]
 }
 
 #[cfg(test)]
